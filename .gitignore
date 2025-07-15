@@ -1,2 +1,84 @@
-node_modules
+# Node.js
+node_modules/
 .env
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# React Native
+# Android
+android/.gradle/
+android/app/build/
+android/build/
+android/.idea/
+android/local.properties
+android/.cxx/
+android/.externalNativeBuild/
+android/.DS_Store
+
+# iOS
+ios/Pods/
+ios/build/
+ios/Podfile.lock
+ios/.DS_Store
+
+# Metro
+.expo/
+.expo-shared/
+*.expo
+*.expo-shared
+
+# Misc
+*.keystore
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# VSCode
+.vscode/
+
+# Test coverage
+coverage/
+*.lcov
+
+# React Native packager
+*.packager-info
+*.swm
+*.tmp
+
+# Watchman
+.watchmanconfig
+
+# Buck
+.buckconfig
+.buckd/
+buck-out/
+\.buckd/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots
+
+# Misc
+*.iml
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# macOS
+*.DS_Store
+
+# Windows
+*.lnk
