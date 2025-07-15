@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartElectro Cable Calculator</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-bolt"></i>
+                <h1>SmartElectro Cable Calculator</h1>
+            </div>
+            <p class="subtitle">Professional electrical cable sizing and analysis tool</p>
+        </header>
+
+        <main class="main-content">
+            <div class="calculator-grid">
+                <!-- Input Section -->
+                <div class="input-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-cog"></i> Input Parameters</h2>
+                    </div>
+                    
+                    <form id="cableForm" class="input-form">
+                        <div class="form-group">
+                            <label for="voltage">Voltage (V)</label>
+                            <input type="number" id="voltage" name="voltage" value="400" min="1" step="1" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="power">Power (kW)</label>
+                            <input type="number" id="power" name="power" value="10" min="0.1" step="0.1" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="powerFactor">Power Factor</label>
+                            <input type="number" id="powerFactor" name="powerFactor" value="0.8" min="0.1" max="1" step="0.01" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="distance">Distance (m)</label>
+                            <input type="number" id="distance" name="distance" value="100" min="1" step="1" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phases">Number of Phases</label>
+                            <select id="phases" name="phases">
+                                <option value="1">Single Phase</option>
+                                <option value="3" selected>Three Phase</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="voltageDropLimit">Voltage Drop Limit (%)</label>
+                            <input type="number" id="voltageDropLimit" name="voltageDropLimit" value="5.0" min="0.1" max="10" step="0.1" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="installationMethod">Installation Method</label>
+                            <select id="installationMethod" name="installationMethod">
+                                <option value="air" selected>Air</option>
+                                <option value="conduit">Conduit</option>
+                                <option value="buried">Buried</option>
+                                <option value="tray">Tray</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ambientTemp">Ambient Temperature (°C)</label>
+                            <select id="ambientTemp" name="ambientTemp">
+                                <option value="30" selected>30°C</option>
+                                <option value="35">35°C</option>
+                                <option value="40">40°C</option>
+                                <option value="45">45°C</option>
+                                <option value="50">50°C</option>
+                                <option value="55">55°C</option>
+                                <option value="60">60°C</option>
+                            </select>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-calculator"></i> Calculate
+                            </button>
+                            <button type="button" class="btn btn-secondary" id="resetBtn">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Results Section -->
+                <div class="results-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-chart-line"></i> Results</h2>
+                    </div>
+                    
+                    <div id="results" class="results-content">
+                        <div class="no-results">
+                            <i class="fas fa-calculator"></i>
+                            <p>Enter parameters and click Calculate to see results</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Analysis Section -->
+            <div class="analysis-section hidden" id="analysisSection">
+                <div class="section-header">
+                    <h2><i class="fas fa-chart-bar"></i> Detailed Analysis</h2>
+                </div>
+                
+                <div class="analysis-grid">
+                    <div class="analysis-card">
+                        <h3>Economic Analysis</h3>
+                        <div id="economicAnalysis" class="analysis-content"></div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <h3>Safety Analysis</h3>
+                        <div id="safetyAnalysis" class="analysis-content"></div>
+                    </div>
+                    
+                    <div class="analysis-card">
+                        <h3>Recommendations</h3>
+                        <div id="recommendations" class="analysis-content"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>&copy; 2024 SmartElectro AI. Professional electrical engineering tools.</p>
+        </footer>
+    </div>
+
+    <script src="../js/script.js"></script>
+</body>
+</html> 
