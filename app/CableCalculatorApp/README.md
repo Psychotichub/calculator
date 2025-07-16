@@ -1,79 +1,177 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Cable Calculator App
 
-# Getting Started
+A professional electrical cable sizing and analysis tool built with React Native.
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+## Features
 
-## Step 1: Start the Metro Server
+- **Cable Size Calculation**: Automatically calculates the appropriate cable size based on electrical parameters
+- **Voltage Drop Analysis**: Determines voltage drop percentage and safety status
+- **Cost Estimation**: Provides detailed cost breakdown and pricing information
+- **Safety Recommendations**: Offers safety analysis and recommendations
+- **Multi-Phase Support**: Supports both single-phase and three-phase calculations
+- **Professional UI**: Clean, modern interface optimized for mobile devices
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+## Technical Specifications
 
-To start Metro, run the following command from the _root_ of your React Native project:
+### Compatible Versions (2025)
+- React Native: `0.74.0`
+- Node.js: `18.x (LTS)`
+- React: `18.2.0`
+- JDK: `17`
+- Android Gradle Plugin: `8.0.2`
+- Gradle: `8.1`
 
-```bash
-# using npm
-npm start
+### Key Dependencies
+- `@react-navigation/native`: `6.1.9` - Navigation system
+- `@react-navigation/stack`: `6.3.20` - Stack navigation
+- `react-native-reanimated`: `3.6.1` - Animations
+- `react-native-gesture-handler`: `2.14.0` - Gesture handling
+- `react-native-screens`: `3.29.0` - Screen management
+- `@react-native-picker/picker`: `2.4.10` - Picker components
+- `react-native-safe-area-context`: `4.8.2` - Safe area handling
 
-# OR using Yarn
-yarn start
+## Installation & Setup
+
+### Prerequisites
+1. **Node.js 18.x (LTS)**
+   - Download from: https://nodejs.org/en
+
+2. **Java JDK 17**
+   - Required for Android development
+   - Ensure `JAVA_HOME` is set correctly
+
+3. **Android Studio**
+   - Install latest **Hedgehog** or **Giraffe** version
+   - Set up Android SDK, NDK, and emulator
+
+4. **React Native CLI**
+   ```bash
+   npm install -g react-native-cli
+   ```
+
+### Project Setup
+1. **Navigate to the project directory**
+   ```bash
+   cd "E:/cable calculator/app/CableCalculatorApp"
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Start Metro bundler**
+   ```bash
+   npx react-native start
+   ```
+
+4. **Run on Android**
+   ```bash
+   npx react-native run-android
+   ```
+
+## Project Structure
+
+```
+CableCalculatorApp/
+├── src/
+│   ├── screens/
+│   │   ├── CableCalculatorScreen.js    # Main calculator interface
+│   │   └── ResultsScreen.js           # Results display
+│   ├── utils/
+│   │   └── cableCalculator.js         # Calculation logic
+│   └── navigation/
+│       └── AppNavigator.js            # Navigation setup
+├── App.js                             # Main app component
+└── package.json                       # Dependencies
 ```
 
-## Step 2: Start your Application
+## Calculation Features
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+### Input Parameters
+- **Voltage (V)**: System voltage (default: 400V)
+- **Power (kW)**: Load power in kilowatts (default: 10kW)
+- **Power Factor**: Electrical power factor (default: 0.8)
+- **Distance (m)**: Cable length in meters (default: 100m)
+- **Number of Phases**: Single or three-phase (default: 3-phase)
+- **Voltage Drop Limit (%)**: Maximum allowed voltage drop (default: 5%)
+- **Installation Method**: Air, conduit, buried, or tray
+- **Ambient Temperature**: Operating temperature (°C)
 
-### For Android
+### Output Results
+- **Current**: Calculated current in amperes
+- **Voltage Drop**: Percentage voltage drop with safety status
+- **Cable Size**: Recommended cable size in mm²
+- **Total Cost**: Estimated cable cost in USD
+- **Price per Meter**: Cost per meter of cable
 
-```bash
-# using npm
-npm run android
+### Analysis Sections
+- **Economic Analysis**: Cost breakdown and pricing details
+- **Safety Analysis**: Voltage drop limits and safety status
+- **Recommendations**: Professional recommendations and warnings
 
-# OR using Yarn
-yarn android
-```
+## Cable Data
 
-### For iOS
+The app includes comprehensive cable data for both single-phase and three-phase systems:
 
-```bash
-# using npm
-npm run ios
+### Single-Phase Cables
+- Sizes: 1, 1.5, 2.5, 4, 6, 10, 16, 25, 35, 50, 70, 95, 120, 150, 185, 240 mm²
+- Current capacities and resistances for each size
+- Pricing data for cost estimation
 
-# OR using Yarn
-yarn ios
-```
+### Three-Phase Cables
+- Same size range with adjusted pricing
+- Higher costs for three-phase installations
+- Appropriate safety margins
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+## Development
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+### Running the App
+1. **Start Metro bundler**
+   ```bash
+   npx react-native start
+   ```
 
-## Step 3: Modifying your App
+2. **Run on Android device/emulator**
+   ```bash
+   npx react-native run-android
+   ```
 
-Now that you have successfully run the app, let's modify it.
+3. **Run on iOS (macOS only)**
+   ```bash
+   npx react-native run-ios
+   ```
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+### Debugging
+- Use React Native Debugger or Flipper for debugging
+- Metro bundler provides hot reloading for development
+- Check console logs for calculation details
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+### Building for Production
+1. **Android APK**
+   ```bash
+   cd android && ./gradlew assembleRelease
+   ```
 
-## Congratulations! :tada:
+2. **iOS Archive** (macOS only)
+   - Open in Xcode and archive
 
-You've successfully run and modified your React Native App. :partying_face:
+## Troubleshooting
 
-### Now what?
+### Common Issues
+1. **Metro bundler issues**: Clear cache with `npx react-native start --reset-cache`
+2. **Android build errors**: Clean project with `cd android && ./gradlew clean`
+3. **Dependency conflicts**: Check version compatibility in package.json
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
+### Performance Optimization
+- The app uses in-memory calculations for fast performance
+- No external API calls required
+- Optimized for mobile devices
 
-# Troubleshooting
+## License
 
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+This project is part of the SmartElectro Cable Calculator suite.
 
-# Learn More
+## Support
 
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+For technical support or feature requests, please refer to the main project documentation.

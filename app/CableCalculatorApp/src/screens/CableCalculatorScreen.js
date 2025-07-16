@@ -7,27 +7,25 @@ import {
   ScrollView,
   StyleSheet,
   Alert,
-  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import RNPickerSelect from 'react-native-picker-select';
-import { CableCalculator } from '../utils/cableCalculator';
+import { Picker } from '@react-native-picker/picker';
+import { calculateCableSize } from '../utils/cableCalculator';
 
-const CableCalculatorScreen = ({ navigation }) => {
+const CableCalculatorScreen = ({ onCalculate }) => {
   const [formData, setFormData] = useState({
     voltage: '400',
     power: '10',
     powerFactor: '0.8',
     distance: '100',
-    phases: '3',
+    phases: 3,
     voltageDropLimit: '5.0',
     installationMethod: 'air',
     ambientTemp: '30',
   });
 
-  const [isCalculating, setIsCalculating] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({
@@ -36,25 +34,12 @@ const CableCalculatorScreen = ({ navigation }) => {
     }));
   };
 
-  const validateForm = () => {
-    const required = ['voltage', 'power', 'powerFactor', 'distance', 'phases', 'voltageDropLimit'];
-    for (const field of required) {
-      if (!formData[field] || parseFloat(formData[field]) <= 0) {
-        Alert.alert('Validation Error', `Please enter a valid value for ${field}`);
-        return false;
-      }
-    }
-    return true;
-  };
-
-  const handleCalculate = async () => {
-    if (!validateForm()) return;
-
-    setIsCalculating(true);
+  const handleCalculate = () => {
+    setLoading(true);
     
     try {
-      const calculator = new CableCalculator();
-      const params = {
+      // Convert string values to numbers
+      const inputData = {
         voltage: parseFloat(formData.voltage),
         power: parseFloat(formData.power),
         powerFactor: parseFloat(formData.powerFactor),
@@ -65,16 +50,14 @@ const CableCalculatorScreen = ({ navigation }) => {
         ambientTemp: parseInt(formData.ambientTemp),
       };
 
-      const results = calculator.calculateCableSize(params);
+      const calculationResult = calculateCableSize(inputData);
       
-      navigation.navigate('Results', {
-        results,
-        inputParams: params,
-      });
+      // Navigate to results screen
+      onCalculate(calculationResult);
     } catch (error) {
-      Alert.alert('Calculation Error', 'An error occurred during calculation. Please check your inputs.');
+      Alert.alert('Calculation Error', error.message);
     } finally {
-      setIsCalculating(false);
+      setLoading(false);
     }
   };
 
@@ -84,7 +67,7 @@ const CableCalculatorScreen = ({ navigation }) => {
       power: '10',
       powerFactor: '0.8',
       distance: '100',
-      phases: '3',
+      phases: 3,
       voltageDropLimit: '5.0',
       installationMethod: 'air',
       ambientTemp: '30',
@@ -92,254 +75,235 @@ const CableCalculatorScreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.keyboardAvoidingView}
-      >
-        <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
-          <View style={styles.header}>
-            <Text style={styles.title}>🔌 Cable Calculator</Text>
-            <Text style={styles.subtitle}>Professional electrical cable sizing and analysis</Text>
+    <KeyboardAvoidingView 
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Cable Calculator</Text>
+          <Text style={styles.subtitle}>Professional electrical cable sizing tool</Text>
+        </View>
+
+        <View style={styles.formContainer}>
+          <Text style={styles.sectionTitle}>Input Parameters</Text>
+
+          {/* Voltage */}
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Voltage (V)</Text>
+            <TextInput
+              style={styles.input}
+              value={formData.voltage}
+              onChangeText={(value) => handleInputChange('voltage', value)}
+              keyboardType="numeric"
+              placeholder="400"
+            />
           </View>
 
-          <View style={styles.formContainer}>
-            <Text style={styles.sectionTitle}>Input Parameters</Text>
+          {/* Power */}
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Power (kW)</Text>
+            <TextInput
+              style={styles.input}
+              value={formData.power}
+              onChangeText={(value) => handleInputChange('power', value)}
+              keyboardType="numeric"
+              placeholder="10"
+            />
+          </View>
 
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>Voltage (V)</Text>
-              <TextInput
-                style={styles.input}
-                value={formData.voltage}
-                onChangeText={(value) => handleInputChange('voltage', value)}
-                keyboardType="numeric"
-                placeholder="400"
-              />
-            </View>
+          {/* Power Factor */}
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Power Factor</Text>
+            <TextInput
+              style={styles.input}
+              value={formData.powerFactor}
+              onChangeText={(value) => handleInputChange('powerFactor', value)}
+              keyboardType="numeric"
+              placeholder="0.8"
+            />
+          </View>
 
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>Power (kW)</Text>
-              <TextInput
-                style={styles.input}
-                value={formData.power}
-                onChangeText={(value) => handleInputChange('power', value)}
-                keyboardType="numeric"
-                placeholder="10"
-              />
-            </View>
+          {/* Distance */}
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Distance (m)</Text>
+            <TextInput
+              style={styles.input}
+              value={formData.distance}
+              onChangeText={(value) => handleInputChange('distance', value)}
+              keyboardType="numeric"
+              placeholder="100"
+            />
+          </View>
 
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>Power Factor</Text>
-              <TextInput
-                style={styles.input}
-                value={formData.powerFactor}
-                onChangeText={(value) => handleInputChange('powerFactor', value)}
-                keyboardType="numeric"
-                placeholder="0.8"
-              />
-            </View>
-
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>Distance (m)</Text>
-              <TextInput
-                style={styles.input}
-                value={formData.distance}
-                onChangeText={(value) => handleInputChange('distance', value)}
-                keyboardType="numeric"
-                placeholder="100"
-              />
-            </View>
-
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>Number of Phases</Text>
-              <RNPickerSelect
-                value={formData.phases}
+          {/* Number of Phases */}
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Number of Phases</Text>
+            <View style={styles.pickerContainer}>
+              <Picker
+                selectedValue={formData.phases}
                 onValueChange={(value) => handleInputChange('phases', value)}
-                items={[
-                  { label: 'Single Phase', value: '1' },
-                  { label: 'Three Phase', value: '3' },
-                ]}
-                style={pickerSelectStyles}
-                placeholder={{ label: 'Select phases', value: null }}
-              />
-            </View>
-
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>Voltage Drop Limit (%)</Text>
-              <TextInput
-                style={styles.input}
-                value={formData.voltageDropLimit}
-                onChangeText={(value) => handleInputChange('voltageDropLimit', value)}
-                keyboardType="numeric"
-                placeholder="5.0"
-              />
-            </View>
-
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>Installation Method</Text>
-              <RNPickerSelect
-                value={formData.installationMethod}
-                onValueChange={(value) => handleInputChange('installationMethod', value)}
-                items={[
-                  { label: 'Air', value: 'air' },
-                  { label: 'Conduit', value: 'conduit' },
-                  { label: 'Buried', value: 'buried' },
-                  { label: 'Tray', value: 'tray' },
-                ]}
-                style={pickerSelectStyles}
-                placeholder={{ label: 'Select method', value: null }}
-              />
-            </View>
-
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>Ambient Temperature (°C)</Text>
-              <RNPickerSelect
-                value={formData.ambientTemp}
-                onValueChange={(value) => handleInputChange('ambientTemp', value)}
-                items={[
-                  { label: '30°C', value: '30' },
-                  { label: '35°C', value: '35' },
-                  { label: '40°C', value: '40' },
-                  { label: '45°C', value: '45' },
-                  { label: '50°C', value: '50' },
-                  { label: '55°C', value: '55' },
-                  { label: '60°C', value: '60' },
-                ]}
-                style={pickerSelectStyles}
-                placeholder={{ label: 'Select temperature', value: null }}
-              />
-            </View>
-
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                style={[styles.button, styles.calculateButton]}
-                onPress={handleCalculate}
-                disabled={isCalculating}
+                style={styles.picker}
               >
-                {isCalculating ? (
-                  <ActivityIndicator color="#fff" />
-                ) : (
-                  <Text style={styles.buttonText}>Calculate Cable Size</Text>
-                )}
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={[styles.button, styles.resetButton]}
-                onPress={resetForm}
-                disabled={isCalculating}
-              >
-                <Text style={styles.resetButtonText}>Reset</Text>
-              </TouchableOpacity>
+                <Picker.Item label="Single Phase" value={1} />
+                <Picker.Item label="Three Phase" value={3} />
+              </Picker>
             </View>
           </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+
+          {/* Voltage Drop Limit */}
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Voltage Drop Limit (%)</Text>
+            <TextInput
+              style={styles.input}
+              value={formData.voltageDropLimit}
+              onChangeText={(value) => handleInputChange('voltageDropLimit', value)}
+              keyboardType="numeric"
+              placeholder="5.0"
+            />
+          </View>
+
+          {/* Installation Method */}
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Installation Method</Text>
+            <View style={styles.pickerContainer}>
+              <Picker
+                selectedValue={formData.installationMethod}
+                onValueChange={(value) => handleInputChange('installationMethod', value)}
+                style={styles.picker}
+              >
+                <Picker.Item label="Air" value="air" />
+                <Picker.Item label="Conduit" value="conduit" />
+                <Picker.Item label="Buried" value="buried" />
+                <Picker.Item label="Tray" value="tray" />
+              </Picker>
+            </View>
+          </View>
+
+          {/* Ambient Temperature */}
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Ambient Temperature (°C)</Text>
+            <View style={styles.pickerContainer}>
+              <Picker
+                selectedValue={formData.ambientTemp}
+                onValueChange={(value) => handleInputChange('ambientTemp', value)}
+                style={styles.picker}
+              >
+                <Picker.Item label="30°C" value="30" />
+                <Picker.Item label="35°C" value="35" />
+                <Picker.Item label="40°C" value="40" />
+                <Picker.Item label="45°C" value="45" />
+                <Picker.Item label="50°C" value="50" />
+                <Picker.Item label="55°C" value="55" />
+                <Picker.Item label="60°C" value="60" />
+              </Picker>
+            </View>
+          </View>
+
+          {/* Action Buttons */}
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={[styles.button, styles.calculateButton]}
+              onPress={handleCalculate}
+              disabled={loading}
+            >
+              <Text style={styles.buttonText}>
+                {loading ? 'Calculating...' : 'Calculate'}
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.button, styles.resetButton]}
+              onPress={resetForm}
+            >
+              <Text style={styles.buttonText}>Reset</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8fafc',
-  },
-  keyboardAvoidingView: {
-    flex: 1,
+    backgroundColor: '#f5f5f5',
   },
   scrollView: {
     flex: 1,
   },
   header: {
+    backgroundColor: '#2196F3',
     padding: 20,
     alignItems: 'center',
-    backgroundColor: '#2563eb',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#fff',
-    marginBottom: 8,
+    color: 'white',
+    marginBottom: 5,
   },
   subtitle: {
-    fontSize: 16,
-    color: '#e2e8f0',
-    textAlign: 'center',
+    fontSize: 14,
+    color: 'white',
+    opacity: 0.8,
   },
   formContainer: {
     padding: 20,
   },
   sectionTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
-    color: '#1e293b',
     marginBottom: 20,
+    color: '#333',
   },
   inputGroup: {
-    marginBottom: 16,
+    marginBottom: 15,
   },
   label: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#374151',
+    fontWeight: '500',
     marginBottom: 8,
+    color: '#333',
   },
   input: {
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
     borderWidth: 1,
-    borderColor: '#d1d5db',
+    borderColor: '#ddd',
     borderRadius: 8,
     padding: 12,
     fontSize: 16,
-    color: '#1f2937',
+  },
+  pickerContainer: {
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
+  picker: {
+    height: 50,
   },
   buttonContainer: {
     marginTop: 20,
-    gap: 12,
+    gap: 10,
   },
   button: {
-    padding: 16,
+    padding: 15,
     borderRadius: 8,
     alignItems: 'center',
-    justifyContent: 'center',
   },
   calculateButton: {
-    backgroundColor: '#2563eb',
+    backgroundColor: '#2196F3',
   },
   resetButton: {
-    backgroundColor: '#f3f4f6',
-    borderWidth: 1,
-    borderColor: '#d1d5db',
+    backgroundColor: '#757575',
   },
   buttonText: {
-    color: '#fff',
+    color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
-  },
-  resetButtonText: {
-    color: '#374151',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-});
-
-const pickerSelectStyles = StyleSheet.create({
-  inputIOS: {
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#d1d5db',
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
-    color: '#1f2937',
-  },
-  inputAndroid: {
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#d1d5db',
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
-    color: '#1f2937',
   },
 });
 

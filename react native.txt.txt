@@ -1,0 +1,55 @@
+# 📱 React Native Android App Setup (2025 Compatible)
+
+This guide provides a version-stable development environment to build Android apps using React Native in 2025.
+
+---
+
+## ✅ Required Tool Versions
+
+| Tool / Library                  | Recommended Version      | Notes                                                    |
+|--------------------------------|---------------------------|----------------------------------------------------------|
+| React Native                   | `0.74.0`                  | Latest stable version with full Android support          |
+| Node.js                        | `18.x (LTS)`              | LTS version for best CLI compatibility                   |
+| npm                            | `9.x` or `10.x`           | Comes with Node.js                                       |
+| React                          | `18.2.0`                  | Fully compatible with RN 0.74.0                          |
+| JDK (Java Development Kit)     | `17`                      | Officially recommended for Gradle builds                 |
+| Android Gradle Plugin (AGP)    | `8.0.2`                   | Matches with Gradle 8.1                                  |
+| Gradle                         | `8.1`                     | Required for AGP 8.0.2                                   |
+| Android Studio                 | `Hedgehog` or `Giraffe`   | Latest stable versions                                   |
+| Kotlin                         | `1.9.x`                   | Used by native Android modules                           |
+| React Native CLI               | `10.x`                    | Global CLI tool (`npm install -g react-native-cli`)      |
+| Watchman (macOS/Linux only)    | `2023.x` or latest        | Optional but recommended for file watching               |
+| Flipper                        | Built-in with RN `0.74.0` | Debugging and inspection tool for React Native           |
+
+---
+
+## 📦 Common Libraries & Versions
+
+| Library                         | Recommended Version | Purpose                      |
+|---------------------------------|----------------------|------------------------------|
+| `@react-navigation/native`      | `6.1.x`              | Navigation system            |
+| `react-native-reanimated`       | `3.x`                | Animations                   |
+| `react-native-gesture-handler`  | `2.14.x`             | Required for navigation      |
+| `react-native-screens`          | `3.29.x`             | Enhances navigation perf     |
+| `react-native-vector-icons`     | `10.0.x`             | Icon support                 |
+| `axios`                         | `1.x`                | HTTP networking              |
+| `redux` / `@reduxjs/toolkit`    | `5.x` / `2.x`        | State management             |
+| `react-native-paper`            | `5.x`                | Material Design UI components|
+
+---
+
+## 🛠️ Installation Guide
+
+### 1. Install Node.js (LTS)
+Download and install from: https://nodejs.org/en
+
+### 2. Install Java JDK 17
+Make sure `JAVA_HOME` is set correctly.
+
+### 3. Install Android Studio
+- Install the latest **Hedgehog** or **Giraffe** version.
+- Ensure Android SDK, NDK, and emulator are properly set up.
+
+### 4. Install React Native CLI
+```bash
+npm install -g react-native-cli
